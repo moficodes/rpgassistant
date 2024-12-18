@@ -1,7 +1,7 @@
 "use server";
 import { genkit, z } from "genkit";
 import { ollama } from "genkitx-ollama";
-import { NPCGenFlowOutput } from "./types";
+import { LocationGenFlowOutput, NPCGenFlowOutput } from "./types";
 
 const ai = genkit({
   plugins: [
@@ -50,6 +50,54 @@ export const npcCreateFlow = ai.defineFlow(
   }
 );
 
+export const locationCreateFlow = ai.defineFlow(
+  {
+    name: "locationCreateFlow",
+    inputSchema: z.string(),
+    outputSchema: LocationGenFlowOutput,
+  },
+  async (locationDescription) => {
+    const locationGen = ai.prompt('location');
+    const { output } = await locationGen({
+      description: locationDescription,
+    });
+    if (!output) {
+      throw new Error("Failed to generate location");
+    }
+    return output;
+  }
+);
+
+const getSpell = ai.defineTool(
+  {
+    name: "getSpell",
+    description: "Get description of a spell",
+    inputSchema: z.string(),
+    outputSchema: z.string(),
+  },
+  async (name) => {
+    const response = await fetch(`https://www.dnd5eapi.co/api/spells/${name}`)
+    const {desc} = await response.json();
+    return desc.join('');
+  }
+);
+
+export const spellDescriptionFlow = ai.defineFlow(
+  {
+    name: "spellDescriptionFlow",
+    inputSchema: z.string(),
+    outputSchema: z.string(),
+
+  },
+  async (spellName) => {
+    const {text} = await ai.generate({
+      prompt: `Provide a short visual description of the spell: ${spellName}. Describe what it looks like as the caster casts it.`,
+      tools: [getSpell],
+    })
+    return text;
+  }
+);
+
 ai.startFlowServer({
-  flows: [menuSuggestionFlow, npcCreateFlow],
+  flows: [npcCreateFlow, locationCreateFlow],
 });

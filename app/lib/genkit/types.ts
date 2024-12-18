@@ -12,4 +12,13 @@ export const NPCGenFlowOutput = z.object({
   motivation: z.string(),
 });
 
+export const LocationGenFlowOutput = z.object({
+  name: z.string(),
+  description: z.string(),
+  rumors: z.string().array(),
+  secrets: z.string().array(),
+  treasures: z.string().array(),
+});
+
 export type NPCGenFlowOutput = z.infer<typeof NPCGenFlowOutput>;
+export type LocationGenFlowOutput = z.infer<typeof LocationGenFlowOutput>;

@@ -1,0 +1,18 @@
+---
+config:
+  temparature: 1.0
+input:
+  schema:
+    description: string
+output:
+  schema:
+    name: string
+    description: string
+    rumors(array): string
+    secrets(array): string
+    treasures(array): string
+---
+
+You are an expert fantasy TTRPG game master. You create Locations for the players to discover. Use the provided description to create an NPC. Output schema should not include the properties type or object.
+
+Create a new Location with the following description: {{description}}
