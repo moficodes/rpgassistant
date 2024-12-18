@@ -2,6 +2,7 @@
 import { genkit, z } from "genkit";
 import { ollama } from "genkitx-ollama";
 import { LocationGenFlowOutput, NPCGenFlowOutput } from "./types";
+import {firestore} from "@/app/lib/firebase/config";
 
 const ai = genkit({
   plugins: [
@@ -18,20 +19,6 @@ const ai = genkit({
   model: "ollama/llama3.3",
 });
 
-export const menuSuggestionFlow = ai.defineFlow(
-  {
-    name: "menuSuggestionFlow",
-    inputSchema: z.string(),
-    outputSchema: z.string(),
-  },
-  async (restaurantTheme) => {
-    const { text } = await ai.generate({
-      prompt: `Invent a menu item for a ${restaurantTheme} themed restaurant.`,
-    });
-    return text;
-  }
-);
-
 export const npcCreateFlow = ai.defineFlow(
   {
     name: "npcCreateFlow",
@@ -46,6 +33,8 @@ export const npcCreateFlow = ai.defineFlow(
     if (!output) {
       throw new Error("Failed to generate NPC");
     }
+    const docref = await firestore.collection('npcs').add(output);
+
     return output;
   }
 );
@@ -64,6 +53,7 @@ export const locationCreateFlow = ai.defineFlow(
     if (!output) {
       throw new Error("Failed to generate location");
     }
+    const docref = await firestore.collection('locations').add(output);
     return output;
   }
 );
@@ -91,7 +81,7 @@ export const spellDescriptionFlow = ai.defineFlow(
   },
   async (spellName) => {
     const {text} = await ai.generate({
-      prompt: `Provide a short visual description of the spell: ${spellName}. Describe what it looks like as the caster casts it.`,
+      prompt: `Provide a short visual description of the spell: ${spellName}. Describe what it looks like as the caster casts it. Write the description in second person`,
       tools: [getSpell],
     })
     return text;
@@ -99,5 +89,5 @@ export const spellDescriptionFlow = ai.defineFlow(
 );
 
 ai.startFlowServer({
-  flows: [npcCreateFlow, locationCreateFlow],
+  flows: [npcCreateFlow, locationCreateFlow, spellDescriptionFlow],
 });

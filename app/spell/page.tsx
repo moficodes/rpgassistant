@@ -36,13 +36,13 @@ export default function Page() {
     setDescription(response);
   }
   return (
-    <div className="flex flex-1 flex-row gap-4 m-4 h-screen">
-      <Card className="flex-1 p-4 w-full">
+    <div className="flex flex-1 flex-row gap-4 m-4 h-[calc(100vh-120px)]">
+      <div className="flex-1 p-4 w-full overflow-y-scroll">
         <h1>Spell</h1>
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <Table className="table-fixed h-vh overflow-y-scroll">
+          <Table className="table-fixed">
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
@@ -61,15 +61,15 @@ export default function Page() {
             </TableBody>
           </Table>
         )}
-      </Card>
-      <Card className="flex-1 p-4 w-full">
+      </div>
+      <div className="flex-1 p-4 w-full">
         <h1>Description</h1>
         {description ? (
           <p>{description}</p>
         ) : (
           <p>Click on a spell to see its description</p>
         )}
-      </Card>
+      </div>
     </div>
   );
 }

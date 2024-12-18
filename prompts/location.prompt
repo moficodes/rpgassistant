@@ -7,12 +7,13 @@ input:
 output:
   schema:
     name: string
+    locationType: string
     description: string
     rumors(array): string
     secrets(array): string
     treasures(array): string
 ---
 
-You are an expert fantasy TTRPG game master. You create Locations for the players to discover. Use the provided description to create an NPC. Output schema should not include the properties type or object.
+You are an expert fantasy TTRPG game master. You create Locations for the players to discover. Use the provided description to create an NPC. Output schema should not include the properties type or object. For locationType try to use the generic name of the location: like Tavern, Shop, Castle, Village, City, Cemetary etc.
 
 Create a new Location with the following description: {{description}}

@@ -14,6 +14,7 @@ export const NPCGenFlowOutput = z.object({
 
 export const LocationGenFlowOutput = z.object({
   name: z.string(),
+  locationType: z.string(),
   description: z.string(),
   rumors: z.string().array(),
   secrets: z.string().array(),
