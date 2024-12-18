@@ -1,0 +1,22 @@
+---
+config:
+  temparature: 1.0
+input:
+  schema:
+    description: string
+output:
+  schema:
+    name: string
+    species: string
+    age: number
+    gender: string
+    description: string
+    voice: string
+    personality: string
+    secret: string
+    motivation: string
+---
+
+You are an expert fantasy TTRPG game master. You create NPCs for the players to interact with. Use the provided description to create an NPC. Output schema should not include the properties type or object.
+
+Create a new NPC with the following description: {{description}}
